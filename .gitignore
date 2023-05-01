@@ -1,0 +1,15 @@
+*.opendb
+.opendb
+obj/
+bin/
+obj/*
+bin/*
+*.out
+.out
+out/
+out/*
+*.DS_Store
+
+.DS_Store
+
+.vs/
