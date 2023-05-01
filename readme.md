@@ -12,16 +12,21 @@
 - Logic. Game Logic will have to be carefully implemented to ensure an authentic Monopoly experience. Such things on my mind is landing on a property and paying the owner (depending on if the property has homes or the owner has all the properties in that specific color)
 
 ### Building
-There isn't a build file ready yet, and it won't be until the program can actually play Monopoly. 
+As of now, I have changed this project to work with CMake so it is more user friendly to build for all platforms. The process for building is very simple, and in the future files will change but the build process will be the same. (Mostly).
 
-However, if you want to build this program please use clang or g++ in a linux environment. (This will work in Windows in Visual Studio -- just make sure you are building with WSL). This program must be built with C++11 as well.
 
-#### Example Build Program
+#### Build Usage
+First clone this repository, then cd into it.
 ```bash
-#This is very subject to change, files will be added and deleted...
-g++ allmainfiles.cpp... -std=c+11 -o build.out
+#Make a new directory, build.
+mkdir build
+#cd into it
+cd build
+#then run cmake ..
+cmake ..
+#after completion (if all goes well) run make
+make
 
-#As of 5/1/23 
---------------------------------
-g++ main.cpp objects/player.cpp objects/gameobject.cpp -std=c+11 -o build.out
+#when the file is built you will see "Monopoly" in your file browser; to run this type:
+./Monopoly
 ```
