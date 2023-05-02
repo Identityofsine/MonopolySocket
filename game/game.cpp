@@ -1,14 +1,17 @@
 #include "game.h"
+
 #include "../includes/nlohmann/json.hpp"
 #include <fstream>
 #include <stdio.h>
 #include <iostream>
-#include <ios> // Include the <ios> header file
+#include <ios>
 #include <thread>
 #include <chrono>         // std::chrono::seconds
 
 using namespace Monopoly;
 using json = nlohmann::json;
+
+
 namespace Monopoly
 {
     
@@ -29,6 +32,10 @@ namespace Monopoly
         importSpacesJson(this->spaces, 40);
         displaySpaces(this->spaces, 40);
         //load json into memory
+
+    }
+
+    void loadLUA() {
 
     }
 
