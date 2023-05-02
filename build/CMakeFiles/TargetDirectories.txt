@@ -1,0 +1,3 @@
+/Users/kevinerdogan/software/MonopolySocket/build/CMakeFiles/Monopoly.dir
+/Users/kevinerdogan/software/MonopolySocket/build/CMakeFiles/edit_cache.dir
+/Users/kevinerdogan/software/MonopolySocket/build/CMakeFiles/rebuild_cache.dir
