@@ -72,6 +72,10 @@ namespace Monopoly {
 		this->owned = forced_state;
 	}
 
+	Player* Buyable::getOwner() {
+		return this->owner;
+	}
+
 	/**
 	 * @brief Construct a new Property Color object
 	 * 
@@ -138,7 +142,7 @@ namespace Monopoly {
 	 * @param propColor 
 	 * @param operation 
 	 */
-	Landable::Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)()) : Buyable(name, price) {
+	Landable::Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)(Player* player, MonopolyEvent event)) : Buyable(name, price) {
 		this->color_parent = propColor;
 		this->onLandBehavior = operation;
 		this->buyable = isBuyable;
@@ -148,11 +152,33 @@ namespace Monopoly {
 	 * @brief Calls onLandBheavior but also could be overwritten;
 	 * 
 	 */
-	void Landable::onLand() {
-		if (onLandBehavior != nullptr) {
-			onLandBehavior();
-		}
-		printf("You landed on : %s\n", this->name.c_str());
+	MonopolyDecision Landable::onLand(Player* player) {
+		// if (onLandBehavior != nullptr) {
+			printf("You landed on : %s\n", this->name.c_str());
+			MonopolyEvent event;
+			if(!this->buyable){
+				event = MonopolyEvent::TAX;
+				player->takeMoney(100);
+			} else if(this->isOwned()){
+				Money total;
+				if(this->structures.empty()){
+					total = 50;
+					player->takeMoney(total); //rent
+				}
+				else {
+					for(int i = 0; i < this->structures.size(); i++){
+						total += this->structures.at(i)->getPrice();
+					}
+				}
+				printf("%s owns this pay him : %d\n", this->getOwner()->getName().c_str(), total);
+				event = MonopolyEvent::OWNED_LAND;
+			} else {
+				event = MonopolyEvent::NORMAL_LAND;
+			}
+			return player->notifyDecision(event);
+
+			// onLandBehavior(player, event);
+		// }
 	}
 	/**
 	 * @brief Add a structure to the vector variable

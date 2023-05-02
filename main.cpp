@@ -13,7 +13,7 @@ int main()
     game.addPlayer(&kevin);
     game.addPlayer(&gabe);
 
-    game.startGame(MonopolyRules(800));
+    game.startGame(MonopolyRules(999999));
 
 
     return 0;

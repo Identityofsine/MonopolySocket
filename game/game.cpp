@@ -37,10 +37,13 @@ namespace Monopoly
 
         json data = json::parse(f)["spaces"];
         int i = 0;
+        auto lambda = [](Player* player, MonopolyEvent event){
+            player->notifyDecision(event);
+        };
         for(auto it : data){
             if(i > 40) break;
             std::string name = it["name"].get<std::string>();
-            array[i++] = Landable(name, 500, false, false, PropertyColor(0, 10)); 
+            array[i++] = Landable(name, 500, true, true, PropertyColor(0, 10), lambda); 
         }
     }
 
@@ -84,6 +87,26 @@ namespace Monopoly
         return true;
     }
 
+    bool MonopolyGame::buyProperty(Player* player, Landable* property){
+        if(property->isOwned() || !property->isBuyable()) return false;
+        bool result = player->takeMoney(property->getPrice());
+        if(result){
+            property->setOwned(player);
+            printf("%s now owns : %s\n", player->getName().c_str(), property->name.c_str());
+            return true;
+        } else 
+            return false;
+    }
+
+    void MonopolyGame::handleMonopolyDecision(MonopolyDecision event, Player* player, Landable* spot){
+        if(event == BUY){
+            bool result = this->buyProperty(player, spot);
+            if(!result)
+                printf("You cannot buy this property...\n");
+        }
+
+    }
+
     bool MonopolyGame::movePlayer(Player* player, int spaces) {
         if (!hasStarted) return false;
         if ((player->getPosition() + spaces + 1) < 40)
@@ -92,10 +115,13 @@ namespace Monopoly
             player->setPosition(player->getPosition() + spaces - 39);
         }
         int playerPOS = player->getPosition();
-        this->spaces[playerPOS].onLand();
-        printf("%s is now at %s\n", player->getName().c_str(), this->spaces[playerPOS].name.c_str());
+        MonopolyDecision _response = this->spaces[playerPOS].onLand(player);
+        handleMonopolyDecision(_response, player, &(this->spaces[playerPOS]));
+        // printf("%s is now at %s\n", player->getName().c_str(), this->spaces[playerPOS].name.c_str());
         return true;
     }
+
+
 
     std::pair<int, int> MonopolyGame::rollDice(Player* player) {
         if (player->getID() == this->playerInTurn->getID()) {

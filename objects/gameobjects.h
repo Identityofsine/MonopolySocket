@@ -3,6 +3,25 @@
 #include <string>
 namespace Monopoly {
 
+	// enum MonopolyPlayerResponse {
+	// 	//binary flags
+	// 	ROLL =  1,
+	// 	BUY = 2,
+	// };
+
+	enum MonopolyDecision{
+		BUY = 1,
+		IGNORE = 2,
+		BUILD_HOUSE = 3,
+	};
+
+	enum MonopolyEvent{
+		NORMAL_LAND = 0,
+		OWNED_LAND = 1,
+		SPECIAL_LAND = 2,
+		JAIL = 4,
+		TAX = 8,
+	};
 
 	using Money = unsigned int;
 
@@ -33,6 +52,7 @@ namespace Monopoly {
 		bool isOwned();
 		void setOwned(Player* owner);
 		void setOwned(bool forced_state);
+		Player* getOwner();
 		void mortagageProperty();
 	};
 
@@ -59,12 +79,12 @@ namespace Monopoly {
 		Landable();
 		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures);
 		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor);
-		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)());
-		void onLand();
+		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)(Player* player, MonopolyEvent event));
+		MonopolyDecision onLand(Player* player);
 		PropertyColor getColorID();
 		void addStructure(Building* building);
 		bool purchaseStructure(Player* player);
-		void(*onLandBehavior)();
+		void(*onLandBehavior)(Player* player, MonopolyEvent event);
 		bool isBuyable();
 		bool canHaveStructures();
 		bool isReadyForHotel();
@@ -108,11 +128,7 @@ namespace Monopoly {
 		Hotel(std::string name, Money price);
 	};
 
-	enum MonopolyPlayerResponse {
-		//binary flags
-		ROLL =  1,
-		BUY = 2,
-	}
+
 
 
 	struct Player : public MonopolyObject {
@@ -136,7 +152,8 @@ namespace Monopoly {
 		bool inJail();
 		void setPosition(int position);
 		int getPosition();
-		MonopolyPlayerResponse notifyTurn();
+		void notifyTurn();
+		MonopolyDecision notifyDecision(MonopolyEvent event);
 		std::string getName();
 
 		

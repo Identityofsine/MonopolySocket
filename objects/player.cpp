@@ -119,15 +119,48 @@ namespace Monopoly {
 		return this->position;
 	}
 
-	MonopolyPlayerResponse Player::notifyTurn() {
+	void Player::notifyTurn() {
 		printf("It's your turn, %s! Type anything in to continue\n", this->name.c_str());
 		std::string input;
 		std::getline(std::cin, input); // wait for input
-		if(input == "r"){
-			return ROLL;
-		} else if(input == "b")
-			return BUY;
-		else
-			return ROLL;
+
+	}
+	MonopolyDecision Player::notifyDecision(MonopolyEvent event) {
+		std::string input;
+		switch(event){
+			case NORMAL_LAND:
+				printf("\nDecide: b - Buy, h - Buy House/Hotel, any input - ignore\n");
+				std::getline(std::cin, input); // wait for input
+				if(input == "b"){
+					//buy;
+					return BUY;
+
+				} else if(input == "h"){
+					//buy hotel;
+					return BUILD_HOUSE;
+				} else 
+					return IGNORE;
+			break;
+			case OWNED_LAND:
+				//pay
+			break;
+			case JAIL:
+				//go to jail
+				printf("You're just visiting Jail...\n");
+
+			break;
+			case SPECIAL_LAND:
+				//railroad or utility
+			break;
+			case TAX:
+				//do something
+				printf("We have taken %d from your account, sorry tax day...\n", 100);
+			break;
+			default:
+				//nothing
+			break;
+		}
+		return IGNORE;
+
 	}
 }

@@ -32,6 +32,8 @@ namespace Monopoly{
         bool movePlayer(Player* player, int spaces);
         std::pair<int, int> rollDice(Player* player);
         void runEngine();
+        void handleMonopolyDecision(MonopolyDecision event, Player* player, Landable* spot);
+        bool buyProperty(Player* player, Landable* spot);
     };
 
 
