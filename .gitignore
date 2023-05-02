@@ -9,6 +9,8 @@ bin/*
 out/
 out/*
 *.DS_Store
+build/
+build/*
 
 .DS_Store
 
