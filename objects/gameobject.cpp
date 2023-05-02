@@ -160,6 +160,10 @@ namespace Monopoly {
 				event = MonopolyEvent::TAX;
 				player->takeMoney(100);
 			} else if(this->isOwned()){
+				if (this->getOwner()->getID() == player->getID()) {
+					event = OWNED_LAND;
+					return player->notifyDecision(event);
+				}
 				Money total;
 				if(this->structures.empty()){
 					total = 50;
