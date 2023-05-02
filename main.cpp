@@ -7,15 +7,18 @@ using namespace Monopoly;
 int main()
 {
     MonopolyGame game = MonopolyGame(4235123);
-    Player player = Player(800);
-    Landable Wyndanch = Landable("Wyndanch Ave", 180, true, true, PropertyColor(0, 2));
-    Landable Brentwood = Landable("Brentwood Ave", 40, true, true, PropertyColor(0, 2));
-    player.buyProperty(&Wyndanch);
-    player.buyProperty(&Brentwood);
+    Player kevin = Player("Kevin", 0);
+    Player gabe = Player("Gabe", 0);
+    game.addPlayer(&kevin);
+    game.addPlayer(&gabe);
+
+    game.startGame(MonopolyRules(800));
+
+    int result = Monopoly::combinePair(game.rollDice(&kevin));
+
+    game.movePlayer(&kevin, result);
 
     
-    
-    Wyndanch.purchaseStructure(&player);
 
     return 0;
 }

@@ -1,5 +1,5 @@
 #include "gameobjects.h"
-#include "math.h";
+#include "math.h"
 #include "stdio.h"
 
 namespace Monopoly {
@@ -9,7 +9,7 @@ namespace Monopoly {
 	* Simple Constructor for Monopoly Objects, All it does is create 
 	*/
 	MonopolyObject::MonopolyObject() {
-		this->id = random();
+		this->id = rand();
 	}
 	long MonopolyObject::getID() {
 		return this->id;

@@ -9,14 +9,15 @@ namespace Monopoly {
 	 * 
 	 * @param startingMoney 
 	 */
-	Player::Player(Money startingMoney) : MonopolyObject() {
+	Player::Player(std::string name, Money startingMoney) : MonopolyObject() {
+		this->name = name;
 		this->money = startingMoney;
 	}
 	/**
 	 * @brief Construct a new Player:: Player object
 	 * 
 	 */
-	Player::Player() : Player(800) {
+	Player::Player() : Player("", 800) {
 
 	}
 
@@ -98,5 +99,27 @@ namespace Monopoly {
 			}
 		}
 		return propCount >= colorID.getMax();
+	}
+
+	std::string Player::getName() {
+		return name;
+	}
+
+
+	void Player::setInJail(bool inJail){
+		this->isInJail = inJail;
+	}
+	bool Player::inJail() {
+		return this->isInJail;
+	}
+	void Player::setPosition(int position) {
+		this->position = position;
+	}
+	int Player::getPosition() {
+		return this->position;
+	}
+
+	void Player::notifyTurn() {
+		printf("It's your turn!");
 	}
 }

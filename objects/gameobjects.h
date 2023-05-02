@@ -110,12 +110,14 @@ namespace Monopoly {
 
 	struct Player : public MonopolyObject {
 	private:
+		std::string name;
 		Money money;
 		std::vector<Landable*> ownedProperties = std::vector<Landable*>();
 		bool isInJail;
+		int position = -1;
 	public:
 		Player();
-		Player(Money startingMoney);
+		Player(std::string name, Money startingMoney);
 
 		Money addMoney(Money new_cash);
 		bool canBuildStructure(PropertyColor color_id);
@@ -125,6 +127,10 @@ namespace Monopoly {
 		void setMoney(Money cash);
 		void setInJail(bool inJail);
 		bool inJail();
+		void setPosition(int position);
+		int getPosition();
+		void notifyTurn();
+		std::string getName();
 
 		
 
