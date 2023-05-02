@@ -108,6 +108,13 @@ namespace Monopoly {
 		Hotel(std::string name, Money price);
 	};
 
+	enum MonopolyPlayerResponse {
+		//binary flags
+		ROLL =  1,
+		BUY = 2,
+	}
+
+
 	struct Player : public MonopolyObject {
 	private:
 		std::string name;
@@ -129,7 +136,7 @@ namespace Monopoly {
 		bool inJail();
 		void setPosition(int position);
 		int getPosition();
-		void notifyTurn();
+		MonopolyPlayerResponse notifyTurn();
 		std::string getName();
 
 		
