@@ -6,12 +6,14 @@ cmake_minimum_required (VERSION 3.8)
 project ("Monopoly")
 
 # Copy data directory to build directory
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/data)
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/lua)
 file(COPY ${CMAKE_SOURCE_DIR}/lua DESTINATION ${CMAKE_BINARY_DIR})
 
 
 # set the path to the Lua source directory
-set(LUA_SOURCE_DIR ${CMAKE_SOURCE_DIR}/includes/lua/lua_src)
+set(LUA_SOURCE_DIR ${CMAKE_SOURCE_DIR}/lib/lua_src)
 
 # add the Lua source files as a library
 add_library(lua STATIC
@@ -79,19 +81,12 @@ add_library(lua STATIC
 )
 
 # Add source to this project's executable.
-add_executable (Monopoly "main.cpp" "./objects/player.cpp" "./objects/gameobject.cpp" "./game/game.cpp" "main.h")
+add_executable (Monopoly "main.cpp" "./objects/player.cpp" "./objects/gameobject.cpp" "./game/game.cpp" "main.h" "lua_functions/lua_func.cpp")
 
 target_link_libraries( Monopoly PUBLIC lua )
 
-if(WIN32)
-    set(LUA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/includes/lua)
-
-    target_include_directories(Monopoly PRIVATE ${LUA_INCLUDE_DIRS})
-else()
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(LUA REQUIRED IMPORTED_TARGET lua5.3)
-    target_link_libraries(Monopoly PRIVATE PkgConfig::LUA)
-endif()
+set(LUA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/lib/lua_src)
+target_include_directories(Monopoly PRIVATE ${LUA_INCLUDE_DIRS})
 
 
 

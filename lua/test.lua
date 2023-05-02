@@ -1,1 +1,1 @@
-print(add(2, 3))
+print("sex time")
