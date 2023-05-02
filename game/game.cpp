@@ -1,5 +1,4 @@
 #include "game.h"
-#include "../includes/jeremyong/selene.h"
 #include "../includes/nlohmann/json.hpp"
 #include <fstream>
 #include <stdio.h>
@@ -19,10 +18,7 @@ namespace Monopoly
         this->startingCash = money;
     }
 
-    void luaDemo() {
-        sel::State state;
-        state.Load("lua/test.lua");
-    }
+
 
     void importSpacesJson(Landable* array, size_t size);
     void displaySpaces(Landable* array, size_t size);
@@ -35,7 +31,6 @@ namespace Monopoly
         this->spaces = new Landable[40];
         importSpacesJson(this->spaces, 40);
         //displaySpaces(this->spaces, 40);
-        luaDemo();
         //load json into memory
 
     }

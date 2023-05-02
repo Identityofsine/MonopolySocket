@@ -14,13 +14,13 @@ int main()
     sel::State state;
     startLua(&state, "lua/test.lua");
 
-    //MonopolyGame game = MonopolyGame(4235123);
-    //Player kevin = Player("Kevin", 0);
-    //Player gabe = Player("Gabe", 0);
-    //game.addPlayer(&kevin);
-    //game.addPlayer(&gabe);
+    MonopolyGame game = MonopolyGame(4235123);
+    Player kevin = Player("Kevin", 0);
+    Player gabe = Player("Gabe", 0);
+    game.addPlayer(&kevin);
+    game.addPlayer(&gabe);
 
-    //game.startGame(MonopolyRules(999999));
+    game.startGame(MonopolyRules(999999));
 
 
     return 0;
