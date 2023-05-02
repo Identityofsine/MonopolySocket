@@ -31,7 +31,7 @@ namespace Monopoly{
         bool startGame(MonopolyRules monopolyRules);
         bool movePlayer(Player* player, int spaces);
         std::pair<int, int> rollDice(Player* player);
-        
+        void runEngine();
     };
 
 

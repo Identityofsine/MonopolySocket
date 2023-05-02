@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <ios> // Include the <ios> header file
+#include <thread>
+#include <chrono>         // std::chrono::seconds
 
 using namespace Monopoly;
 using json = nlohmann::json;
@@ -47,6 +49,20 @@ namespace Monopoly
             printf("Landable : %s\n", array[i].name.c_str());
         }
     } 
+    
+    void MonopolyGame::runEngine() {
+        while (this->hasStarted) {
+            ; //tick
+            Player* player = playerInTurn;
+            player->notifyTurn();
+            int result = combinePair(rollDice(player));
+            printf("You Rolled a : %d\n", result);
+            movePlayer(player, result);
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+        }
+
+    }
 
     bool MonopolyGame::startGame(MonopolyRules rules) {
         if (this->hasStarted) return false;
@@ -57,7 +73,10 @@ namespace Monopoly
             player->setInJail(false);
         }
         playerInTurn = this->players.at(0);
+        runEngine();
     }
+
+
 
     bool MonopolyGame::addPlayer(Player* player) {
         if (this->hasStarted) return false;
@@ -67,19 +86,15 @@ namespace Monopoly
 
     bool MonopolyGame::movePlayer(Player* player, int spaces) {
         if (!hasStarted) return false;
-        if(player->getID() == this->playerInTurn->getID()) {
-            if(int newPOS = player->getPosition() + spaces < 40)
-                player->setPosition(newPOS);
-            else {
-                player->setPosition(newPOS - 40);
-            }
-            int playerPOS = player->getPosition();
-            this->spaces[playerPOS].onLand();
-            printf("%s is now at %s", player->getName().c_str(), this->spaces[playerPOS].name.c_str());
-            return true;
+        if ((player->getPosition() + spaces + 1) < 40)
+            player->setPosition(player->getPosition() + spaces + 1);
+        else {
+            player->setPosition(player->getPosition() + spaces - 39);
         }
-        else
-            return false;
+        int playerPOS = player->getPosition();
+        this->spaces[playerPOS].onLand();
+        printf("%s is now at %s\n", player->getName().c_str(), this->spaces[playerPOS].name.c_str());
+        return true;
     }
 
     std::pair<int, int> MonopolyGame::rollDice(Player* player) {
@@ -89,13 +104,14 @@ namespace Monopoly
             d2 = generateRandomDiceNumber();
             if (d1 == d2) {
                 //doubles
+                printf("%s got Doubles! \n", player->getName().c_str())
                 ;
             }
             else {
-                if(playerIndex >= this->players.size())
+                if(playerIndex + 1 >= this->players.size())
                     playerIndex = 0; // go back to first person
                 else
-                playerIndex = 1;
+                playerIndex++;
             }
             this->playerInTurn = players.at(playerIndex);
             return std::make_pair(d1, d2);
@@ -109,7 +125,11 @@ namespace Monopoly
     * @returns std::pair, a pair of numbers.
     */
     int generateRandomDiceNumber() {
-        srand(time(nullptr));
+        static bool initialized = false;
+        if (!initialized) {
+            srand(time(nullptr));
+            initialized = true;
+        }
         int randomNumber = rand() % 6 + 1;
         return randomNumber;
     }

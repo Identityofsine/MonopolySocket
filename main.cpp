@@ -2,6 +2,7 @@
 #include "objects/gameobjects.h"
 #include "game/game.h"
 #include "main.h"
+#include <thread>
 using namespace Monopoly;
 
 int main()
@@ -14,11 +15,6 @@ int main()
 
     game.startGame(MonopolyRules(800));
 
-    int result = Monopoly::combinePair(game.rollDice(&kevin));
-
-    game.movePlayer(&kevin, result);
-
-    
 
     return 0;
 }

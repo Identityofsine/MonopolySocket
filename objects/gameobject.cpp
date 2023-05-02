@@ -152,7 +152,7 @@ namespace Monopoly {
 		if (onLandBehavior != nullptr) {
 			onLandBehavior();
 		}
-		printf("You landed on : %s", this->name);
+		printf("You landed on : %s\n", this->name.c_str());
 	}
 	/**
 	 * @brief Add a structure to the vector variable

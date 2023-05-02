@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "gameobjects.h"
-
+#include <iostream>
 namespace Monopoly {
 
 	/**
@@ -120,6 +120,9 @@ namespace Monopoly {
 	}
 
 	void Player::notifyTurn() {
-		printf("It's your turn!");
+		printf("It's your turn, %s! Type anything in to continue\n", this->name.c_str());
+		std::string input;
+		std::getline(std::cin, input); // wait for input
+
 	}
 }
