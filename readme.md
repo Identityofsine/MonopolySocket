@@ -30,3 +30,16 @@ make
 #when the file is built you will see "Monopoly" in your file browser; to run this type:
 ./Monopoly
 ```
+
+## Libraries/Dependencies Used
+
+- Lua 5.4.4 [^1]
+- Nlohmann's JSON library [^2]
+- Selene [^3]
+ 
+
+[^1]: [Lua 5.4.4](URL "https://www.lua.org/")
+
+[^2]: [Nlohmann's JSON Repository](URL "https://github.com/nlohmann/json")
+
+[^3]: [Selene Repository](URL "https://github.com/jeremyong/Selene")
