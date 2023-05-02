@@ -38,8 +38,8 @@ make
 - Selene [^3]
  
 
-[^1]: [Lua 5.4.4](URL "https://www.lua.org/")
+[^1]: [Lua 5.4.4](https://www.lua.org/ "https://www.lua.org/")
 
-[^2]: [Nlohmann's JSON Repository](URL "https://github.com/nlohmann/json")
+[^2]: [Nlohmann's JSON Repository](https://github.com/nlohmann/json "https://github.com/nlohmann/json")
 
-[^3]: [Selene Repository](URL "https://github.com/jeremyong/Selene")
+[^3]: [Selene Repository](https://github.com/jeremyong/Selene "https://github.com/jeremyong/Selene")
