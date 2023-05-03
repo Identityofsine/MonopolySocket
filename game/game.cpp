@@ -55,7 +55,7 @@ namespace Monopoly
                 _j_money = it["price"].get<double>();
             }
             catch (json::exception err) {
-                _j_groupID = -1;
+                _j_groupID = 10;
                 _j_money = -1;
                 std::cout << "JSON ERROR : " << err.what() << std::endl;
             }
