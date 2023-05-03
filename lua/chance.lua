@@ -1,14 +1,93 @@
+---
+-- Represents a player in the Monopoly game.
+-- @classmod Player
+
+---
+-- Constructs a new Player object.
+-- @function Player:new
+-- @tparam string name The name of the player.
+-- @tparam Money startingMoney The starting money of the player.
+-- @treturn Player The newly created Player object.
+
+---
+-- Adds money to the player's balance.
+-- @function Player:addMoney
+-- @tparam Money new_cash The amount of money to add.
+-- @treturn bool Whether the money was added successfully.
+
+---
+-- Checks if the player can build a structure on a property of the given color.
+-- @function Player:canBuildStructure
+-- @tparam PropertyColor color_id The color of the property to check.
+-- @treturn bool Whether the player can build a structure on a property of the given color.
+
+---
+-- Buys a property and adds it to the player's list of owned properties.
+-- @function Player:buyProperty
+-- @tparam Landable property The property to buy.
+-- @treturn bool Whether the property was bought successfully.
+
+---
+-- Adds a property to the player's list of owned properties.
+-- @function Player:addProperty
+-- @tparam Landable property The property to add.
+-- @treturn bool Whether the property was added successfully.
+
+---
+-- Takes money from the player's balance.
+-- @function Player:takeMoney
+-- @tparam Money debt The amount of money to take.
+-- @treturn bool Whether the money was taken successfully.
+
+---
+-- Sets the player's balance to the given amount.
+-- @function Player:setMoney
+-- @tparam Money cash The amount of money to set the balance to.
+
+---
+-- Sets whether the player is currently in jail.
+-- @function Player:setInJail
+-- @tparam bool inJail Whether the player is in jail.
+
+---
+-- Checks whether the player is currently in jail.
+-- @function Player:inJail
+-- @treturn bool Whether the player is in jail.
+
+---
+-- Sets the player's position on the board.
+-- @function Player:setPosition
+-- @tparam int position The position to set.
+
+---
+-- Gets the player's position on the board.
+-- @function Player:getPosition
+-- @treturn int The player's position.
+
+---
+-- Notifies the player that it is their turn.
+-- @function Player:notifyTurn
+
+---
+-- Notifies the player of a decision they must make.
+-- @function Player:notifyDecision
+-- @tparam MonopolyEvent event The event that requires the player's decision.
+-- @treturn MonopolyDecision The player's decision.
+
+
 local chance_cards = {
     {
-        text = "Advance to Go (Collect $200)",
+        text = "Advance to Go (Collect $400)",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            player:addMoney(200)
         end
     },
     {
-        text = "Advance to Illinois Ave. - If you pass Go, collect $200",
+        text = "Advance to Illinois Ave. - If you pass Go, collect $400",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            
         end
     },
     {
@@ -33,6 +112,7 @@ local chance_cards = {
         text = "Bank pays you dividend of $50",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            player:addMoney(50)
         end
     },
     {
@@ -45,6 +125,7 @@ local chance_cards = {
         text = "Go Back 3 Spaces",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            
         end
     },
     {
@@ -97,9 +178,9 @@ local chance_cards = {
     }
 }
 
-function PullChanceCard()
+--@tparam player Player
+function PullChanceCard(player)
     local card = chance_cards[random(1, #chance_cards)]
-    
-    return "LUA FUNCTION [PullChanceCard]: EXECUTED"
+    card.action(player)
+    print(string.format("LUA FUNCTION [PullChanceCard]: EXECUTED FOR %s\nCARD: %s\n", player:getName(), card.text));
 end
-

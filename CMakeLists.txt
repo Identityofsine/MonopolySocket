@@ -5,13 +5,6 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("Monopoly")
 
-# Copy data directory to build directory
-file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/data)
-file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
-
-
-file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/lua)
-file(COPY ${CMAKE_SOURCE_DIR}/lua DESTINATION ${CMAKE_BINARY_DIR})
 
 
 # set the path to the Lua source directory
@@ -85,10 +78,24 @@ add_library(lua STATIC
 # Add source to this project's executable.
 add_executable (Monopoly "main.cpp" "./objects/player.cpp" "./objects/gameobject.cpp" "./game/game.cpp" "main.h" "lua_functions/lua_func.cpp")
 
+
+
+add_custom_command(TARGET Monopoly POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/data
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/lua
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/lua ${CMAKE_BINARY_DIR}/lua
+)
+
+
 target_link_libraries( Monopoly PUBLIC lua )
 
 set(LUA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/lib/lua_src)
 target_include_directories(Monopoly PRIVATE ${LUA_INCLUDE_DIRS})
+
+set(LUA_BRIDGE_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/includes/LuaBridge)
+target_include_directories(Monopoly PRIVATE ${LUA_BRIDGE_INCLUDE_DIR})
+
 
 
 
