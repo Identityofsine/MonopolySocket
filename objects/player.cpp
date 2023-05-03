@@ -101,52 +101,89 @@ namespace Monopoly {
 		return propCount >= colorID.getMax();
 	}
 
+	/**
+	 * @brief Return the player's name
+	 * 
+	 * @return std::string 
+	 */
 	std::string Player::getName() {
 		return name;
 	}
 
-
+	/**
+	 * @brief Set the player in Jail;
+	 * 
+	 * @param inJail 
+	 */
 	void Player::setInJail(bool inJail){
 		this->isInJail = inJail;
 	}
+	/**
+	 * @brief Returns if the player is in Jail.
+	 * 
+	 * @return true 
+	 * @return false 
+	 */
 	bool Player::inJail() {
 		return this->isInJail;
 	}
+	/**
+	 * @brief Sets the position of the player, mainly used on movePlayer in MonopolyGame.
+	 * 
+	 * @param position 
+	 */
 	void Player::setPosition(int position) {
 		this->position = position;
 	}
+	/**
+	 * @brief Get the player's position.
+	 * 
+	 * @return int 
+	 */
 	int Player::getPosition() {
 		return this->position;
 	}
 
+	/**
+	 * @brief This is a function that acts as a subscriber to the MonopolyGame, it is called every time its the player's turn.
+	 * 
+	 */
 	void Player::notifyTurn() {
 		printf("It's your turn, %s! Type anything in to continue\n", this->name.c_str());
+		// this is here to wait for an input but in the future it will not be here, instead it'll be waiting for a response from the client.
 		std::string input;
 		std::getline(std::cin, input); // wait for input
 
 	}
+
+	/**
+	 * @brief This acts as a function to ask the player their decision to a certian event, either landing on a normal property or falling into jail. This function is also subject to radical change for sockets. It may even be possible that this function will be a lambda defined in the initalization of a game through sockets.
+	 * 
+	 * @param event 
+	 * @return MonopolyDecision 
+	 */
 	MonopolyDecision Player::notifyDecision(MonopolyEvent event) {
 		std::string input;
 		printf("\nMoney : %d, Position :%d\n", money, position);
 
 		switch(event){
-			case NORMAL_LAND:
-				printf("\nDecide: b - Buy, h - Buy House/Hotel, any input - ignore\n");
+			case NORMAL_LAND: // land that is normal, either unowned or unbuyable
+				printf("Decide: b - Buy, h - Buy House/Hotel, any input - ignore\n");
 				std::getline(std::cin, input); // wait for input
-				if(input == "b"){
+				if(input == "b"){ // buy 
 					//buy;
 					return BUY;
 
-				} else if(input == "h"){
+				} else if(input == "h"){ // build house
 					//buy hotel;
 					return BUILD_HOUSE;
 				} else 
-					return IGNORE;
+					return IGNORE; //do nothing
 			break;
-			case OWNED_LAND:
+			case OWNED_LAND: //owned land; paying is handled by onLand
 				//pay
 			break;
-			case JAIL:
+			case JAIL: // go to jail; may not even be handled here.
 				//go to jail
 				printf("You're just visiting Jail...\n");
 
@@ -154,9 +191,9 @@ namespace Monopoly {
 			case SPECIAL_LAND:
 				//railroad or utility
 			break;
-			case TAX:
+			case TAX: // Landing on TAX, this is handled by onLandBehavior for tax spots, this isn't needed.
 				//do something
-				printf("We have taken %d from your account, sorry tax day...\n", 100);
+	
 			break;
 			default:
 				//nothing

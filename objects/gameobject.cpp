@@ -11,6 +11,11 @@ namespace Monopoly {
 	MonopolyObject::MonopolyObject() {
 		this->id = rand();
 	}
+	/**
+	 * @brief Returns ID of this object
+	 * 
+	 * @return long 
+	 */
 	long MonopolyObject::getID() {
 		return this->id;
 	}
@@ -72,6 +77,11 @@ namespace Monopoly {
 		this->owned = forced_state;
 	}
 
+	/**
+	 * @brief Returns the owner.
+	 * 
+	 * @return Player* 
+	 */
 	Player* Buyable::getOwner() {
 		return this->owner;
 	}
@@ -110,6 +120,10 @@ namespace Monopoly {
 		return max;
 	}
 
+	/**
+	 * @brief Construct a new Landable:: Landable object with default properties
+	 * 
+	 */
 	Landable::Landable() : Buyable("NULL", 0) {
 		this->color_parent = PropertyColor(-1, -1);
 		this->onLandBehavior = nullptr;
@@ -149,7 +163,7 @@ namespace Monopoly {
 		this->structuresAllowed = canHaveStructures;
 	}
 	/**
-	 * @brief Calls onLandBheavior but also could be overwritten;
+	 * @brief This function is called when a player lands on a new space. It has implementation to call onLandBehavior, a lambda expression passed in during the construction of the MonopolyGame. This function will eventually be split up to deal with players who own the space and has a color dominance, a monopoly with holels and homes, and railroads (although this can be changed).
 	 * 
 	 */
 	MonopolyDecision Landable::onLand(Player* player) {
@@ -191,7 +205,7 @@ namespace Monopoly {
 		// }
 	}
 	/**
-	 * @brief Add a structure to the vector variable
+	 * @brief Add a structure to the vector variable.
 	 * 
 	 * @param building 
 	 */

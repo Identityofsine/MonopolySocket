@@ -14,7 +14,11 @@ using json = nlohmann::json;
 
 namespace Monopoly
 {
-    
+    /**
+     * @brief Constructs a new instance of MonopolyRules, a simple struct to hold all of the data for initialization.
+     * 
+     * @param money 
+     */
     MonopolyRules::MonopolyRules(Money money) {
         this->startingCash = money;
     }
@@ -37,19 +41,28 @@ namespace Monopoly
 
     }
 
+    /**
+     * This function uses an ifstream to load a json file from ~/data/spaces and ~/data/color to generate both Landable objects and their associated behaviors.
+     * 
+     * @brief This function is subject to change in the future. Intializes the Landable array.
+     * 
+     * @param array 
+     * @param size 
+     */
     void importSpacesJson(Landable array[], size_t size) {
         std::ifstream f("data/spaces.json");
         std::ifstream z("data/color.json");
-        json data = json::parse(f)["spaces"];
-        json color_data = json::parse(z)["groups"];
-        int i = 0;
-
+        json data = json::parse(f)["spaces"]; // all the spaces in spaces.json
+        json color_data = json::parse(z)["groups"]; //all the color_data in color.json
+        int i = 0; //index
+        //loop through data array
         for(auto it : data){
-            if(i > 40) break;
+            if(i > size) break; //break if size is hit(somehow)
             std::string _j_name = it["name"].get<std::string>();
             bool _j_buyable = it["buyable"].get<bool>();
             int _j_groupID = 0;
             int _j_money = 0;
+            //try to read _j_groupID and _j_money from the json file, this can be removed in the future as a bug was happening where it would read null.
             try {
                 _j_groupID = it["group"].get<int>();
                 _j_money = it["price"].get<double>();
@@ -59,12 +72,16 @@ namespace Monopoly
                 _j_money = -1;
                 std::cout << "JSON ERROR : " << err.what() << std::endl;
             }
+            //ppc object are for holding PropertyInformation, such as Boardwalk being a dark blue property and it only having one sibiling (total 2).
             PropertyColor ppc = PropertyColor(_j_groupID, color_data.at(_j_groupID)["numberOfProperties"].get<int>());
             bool _j_structureable = _j_buyable && _j_groupID != 10 && _j_groupID != 11 ? true : false;
+            //Labmda function used for unique behavior, such as landing on GO or going to jail, etc.
+            //using auto lambda = [](args){}; was a possibility but it wasn't possible to change lambda after inital assignment.  
             std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [](Landable* landable, Player* player, MonopolyEvent event) {};
 
+            //switch ID (mapped to color.json)
             switch (_j_groupID) {
-                case 9:
+                case 9: //Utility
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
                         if (!landable->isOwned()) return;
                         printf("\n!Rolling Again...!\n");
@@ -77,28 +94,28 @@ namespace Monopoly
                         printf("%s had to pay %d to %s\n", player->getName().c_str(), result, landable->getOwner()->getName().c_str());
                     };
                     break;
-                case 10:
+                case 10: //Community Chest
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
                         printf("\n!COMMUNITY CARD!\n");
                         //pull card out, then send to player.
                         //run card function using lua.
                     };
                     break;
-                case 11:
+                case 11: //Chance
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
                         printf("\n!CHANCE CARD!\n");
                         //pull card out, then send to player.
                         //run card function using lua.
                     };
                     break;
-                case 12:
+                case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
                         //tax;
                         printf("%s time time to pay : $%d!!!\n", landable->name.c_str(), landable->getPrice());
                         player->takeMoney(landable->getPrice());
                     };
                     break;
-                case 16:
+                case 16: //GO
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
                         printf("%s landed on go, heres 400 dollars!\n", player->getName().c_str());
 
@@ -108,17 +125,35 @@ namespace Monopoly
                 default:
                     break;
             }
-            array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, PropertyColor(0, 10), lambda);
+            array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, ppc, lambda); 
 
         }
     }
 
+    /**
+     * 
+     * Simple Debug Function that displays all the spaces stored in a Landable array.
+     * 
+     * @brief Debug Function, Displays all the spaces
+     * 
+     * @param array 
+     * @param size 
+     */
     void displaySpaces(Landable array[], size_t size) {
         for(size_t i = 0; i < size; i++) {
             printf("Landable : %s\n", array[i].name.c_str());
         }
     } 
     
+    /**
+     * 
+     * This function is very important for behaviour and the entire game. This starts the MonopolyGame Engine for this specific game. It executes logic every two seconds and multiple revisions will be made for this function. The problem right now is waiting for user input without wasting resources; std::cin is fine but when we use sockets it's very important to make sure no code is executed until a response from the player in turn is received.
+     * 
+     * @brief Initalize the Monopoly Engine and run the game at 2 ticks a second. This speed should go down as the game and program becomes more intense, especially when using a socket. 
+     * 
+     * 
+     * 
+     */
     void MonopolyGame::runEngine() {
         while (this->hasStarted) {
             ; //tick
@@ -133,6 +168,13 @@ namespace Monopoly
 
     }
 
+    /**
+     * @brief Offically Starts the Game, will not start if no players are in the lobby.
+     * 
+     * @param rules MonopolyRules Object
+     * @return true 
+     * @return false 
+     */
     bool MonopolyGame::startGame(MonopolyRules rules) {
         if (this->hasStarted) return false;
         if (this->players.empty()) return false;
@@ -146,13 +188,27 @@ namespace Monopoly
     }
 
 
-
+    /**
+     * @brief Adds a player to the game; returns false if the game has started.
+     * 
+     * @param player 
+     * @return true 
+     * @return false 
+     */
     bool MonopolyGame::addPlayer(Player* player) {
         if (this->hasStarted) return false;
         this->players.push_back(player);
         return true;
     }
 
+    /**
+     * @brief This function returns true if the player can buy the property and false when they cant (Not enough money, or Landable doesn't support ownership).
+     * 
+     * @param player 
+     * @param property 
+     * @return true 
+     * @return false 
+     */
     bool MonopolyGame::buyProperty(Player* player, Landable* property){
         if(property->isOwned() || !property->isBuyable()) return false;
         bool result = player->takeMoney(property->getPrice());
@@ -164,6 +220,13 @@ namespace Monopoly
             return false;
     }
 
+    /**
+     * @brief Handles a player's decision, currently only supports buying property, but eventually the player will be able to buy houses and homes on their own property, this function is subject to be removed in the future for better implementation with buying houses independent.
+     * 
+     * @param event MonopolyDecision Enumeration
+     * @param player Player Pointer
+     * @param spot Landable Pointer
+     */
     void MonopolyGame::handleMonopolyDecision(MonopolyDecision event, Player* player, Landable* spot){
         if(event == BUY){
             bool result = this->buyProperty(player, spot);
@@ -173,8 +236,17 @@ namespace Monopoly
 
     }
 
+    /**
+     * @brief This function is responsible for moving the player across the board, this function also calles handleMonopolyDecision to see what the player wants to do, it's also very important to know that when the player moves, this returns false if the game isn't active or if the player is in jail.
+     * 
+     * @param player 
+     * @param spaces 
+     * @return true 
+     * @return false 
+     */
     bool MonopolyGame::movePlayer(Player* player, int spaces) {
         if (!hasStarted) return false;
+        if (player->inJail()) return false;
         if ((player->getPosition() + spaces + 1) < 40)
             player->setPosition(player->getPosition() + spaces + 1);
         else {
@@ -188,7 +260,12 @@ namespace Monopoly
     }
 
 
-
+    /**
+     * @brief Roll dice is the heart of movement for the game. This function rolls two numbers and checks if they are doubles. This function is also responsible for changing the turn of the player. It returns the dice roll the player gets in a pair object
+     * 
+     * @param player Current Player.
+     * @return std::pair<int, int> 
+     */
     std::pair<int, int> MonopolyGame::rollDice(Player* player) {
         if (player->getID() == this->playerInTurn->getID()) {
             int d1, d2;
