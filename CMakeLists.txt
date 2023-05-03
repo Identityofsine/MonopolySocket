@@ -8,6 +8,8 @@ project ("Monopoly")
 # Copy data directory to build directory
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/data)
 file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})
+
+
 file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/lua)
 file(COPY ${CMAKE_SOURCE_DIR}/lua DESTINATION ${CMAKE_BINARY_DIR})
 

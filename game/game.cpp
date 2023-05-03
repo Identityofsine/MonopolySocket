@@ -1,4 +1,5 @@
 #include "game.h"
+#include "../lua_functions/lua_func.h"
 #include "../includes/nlohmann/json.hpp"
 #include <fstream>
 #include <stdio.h>
@@ -106,6 +107,8 @@ namespace Monopoly
                         printf("\n!CHANCE CARD!\n");
                         //pull card out, then send to player.
                         //run card function using lua.
+                        pullChanceCard(player);
+
                     };
                     break;
                 case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
@@ -123,6 +126,9 @@ namespace Monopoly
                     };
                     break;
                 default:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        pullChanceCard(player);
+                    };
                     break;
             }
             array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, ppc, lambda); 
