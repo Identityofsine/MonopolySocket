@@ -66,13 +66,15 @@ namespace Monopoly
             switch (_j_groupID) {
                 case 9:
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        if (!landable->isOwned()) return;
                         printf("\n!Rolling Again...!\n");
                         int roll = generateRandomDiceNumber();
                         int roll2 = generateRandomDiceNumber();
                         int result = roll + roll2;
-                        player->takeMoney(result * 4);
-                        landable->getOwner()->addMoney(result * 4);
-                        printf("%s had to pay %d to %s\n", player->getName().c_str(), result * 4, landable->getOwner()->getName().c_str());
+                        result = result * 4;
+                        player->takeMoney(result);
+                        landable->getOwner()->addMoney(result);
+                        printf("%s had to pay %d to %s\n", player->getName().c_str(), result, landable->getOwner()->getName().c_str());
                     };
                     break;
                 case 10:
@@ -98,7 +100,9 @@ namespace Monopoly
                     break;
                 case 16:
                     lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        player->addMoney(800);
+                        printf("%s landed on go, heres 400 dollars!\n", player->getName().c_str());
+
+                        player->addMoney(400);
                     };
                     break;
                 default:

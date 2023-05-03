@@ -154,7 +154,7 @@ namespace Monopoly {
 	 */
 	MonopolyDecision Landable::onLand(Player* player) {
 		// if (onLandBehavior != nullptr) {
-			printf("You landed on : %s\n", this->name.c_str());
+			printf("You landed on : %s // CURRENT POS : %d\n", this->name.c_str(), player->getPosition());
 			MonopolyEvent event = NORMAL_LAND;
 
 			if (this->onLandBehavior != nullptr) {

@@ -127,6 +127,8 @@ namespace Monopoly {
 	}
 	MonopolyDecision Player::notifyDecision(MonopolyEvent event) {
 		std::string input;
+		printf("\nMoney : %d, Position :%d\n", money, position);
+
 		switch(event){
 			case NORMAL_LAND:
 				printf("\nDecide: b - Buy, h - Buy House/Hotel, any input - ignore\n");
