@@ -142,7 +142,7 @@ namespace Monopoly {
 	 * @param propColor 
 	 * @param operation 
 	 */
-	Landable::Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)(Player* player, MonopolyEvent event)) : Buyable(name, price) {
+	Landable::Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, std::function<void(Landable* landable, Player* player, MonopolyEvent event)> operation) : Buyable(name, price) {
 		this->color_parent = propColor;
 		this->onLandBehavior = operation;
 		this->buyable = isBuyable;
@@ -155,10 +155,16 @@ namespace Monopoly {
 	MonopolyDecision Landable::onLand(Player* player) {
 		// if (onLandBehavior != nullptr) {
 			printf("You landed on : %s\n", this->name.c_str());
-			MonopolyEvent event;
+			MonopolyEvent event = NORMAL_LAND;
+
+			if (this->onLandBehavior != nullptr) {
+
+				onLandBehavior(this, player, NORMAL_LAND);
+			}
+
 			if(!this->buyable){
-				event = MonopolyEvent::TAX;
-				player->takeMoney(100);
+				//event = MonopolyEvent::TAX;
+				//player->takeMoney(100);
 			} else if(this->isOwned()){
 				if (this->getOwner()->getID() == player->getID()) {
 					event = OWNED_LAND;

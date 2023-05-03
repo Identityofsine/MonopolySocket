@@ -2,6 +2,11 @@
     "spaces": [
       {
         "name": "GO",
+        "price": -1,
+        "group": 16,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1,
         "buyable": false
       },
       {
@@ -22,6 +27,11 @@
       },
       {
         "name": "Community Chest",
+        "price": -1,
+        "group": 10,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1,
         "buyable": false
       },
       {
@@ -42,7 +52,12 @@
       },
       {
         "name": "Income Tax",
-        "buyable": false
+        "buyable": false,
+        "price": 200,
+        "group": 12,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Reading Railroad",
@@ -75,7 +90,12 @@
       },
       {
         "name": "Chance",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 11,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Vermont Avenue",
@@ -111,7 +131,12 @@
       },
       {
         "name": "Jail",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 13,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "St. Charles Place",
@@ -135,6 +160,10 @@
         "group": 9,
         "rent": [
           4,
+          10,
+          10,
+          10,
+          10,
           10
         ],
         "mortgageValue": 75,
@@ -202,7 +231,12 @@
       },
       {
         "name": "Community Chest",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 10,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Tennessee Avenue",
@@ -238,7 +272,12 @@
       },
       {
         "name": "Free Parking",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 14,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Kentucky Avenue",
@@ -258,7 +297,12 @@
       },
       {
         "name": "Chance",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 11,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Indiana Avenue",
@@ -343,6 +387,10 @@
         "group": 9,
         "rent": [
           4,
+          10,
+          10,
+          10,
+          10,
           10
         ],
         "mortgageValue": 75,
@@ -366,7 +414,13 @@
       },
       {
         "name": "Go To Jail",
-        "buyable": false
+        "buyable":  false,
+        "price": -1,
+        "group": 15,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
+
       },
       {
         "name": "Pacific Avenue",
@@ -402,7 +456,13 @@
       },
       {
         "name": "Community Chest",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 10,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
+
       },
       {
         "name": "Pennsylvania Avenue",
@@ -435,7 +495,12 @@
       },
       {
         "name": "Chance",
-        "buyable": false
+        "buyable": false,
+        "price": -1,
+        "group": 11,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Park Place",
@@ -455,7 +520,12 @@
       },
       {
         "name": "Luxury Tax",
-        "buyable": false
+        "buyable": false,
+        "price": 100  ,
+        "group": 12,
+        "rent": [ 0, 0, 0, 0, 0, 0 ],
+        "houseCost": -1,
+        "mortgageValue": -1
       },
       {
         "name": "Boardwalk",

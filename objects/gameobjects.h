@@ -1,6 +1,8 @@
 #pragma once
 #include "vector"
 #include <string>
+#include <functional>
+
 namespace Monopoly {
 
 	// enum MonopolyPlayerResponse {
@@ -75,16 +77,17 @@ namespace Monopoly {
 		bool buyable, structuresAllowed;
 		Money houseCost, hotelCost;
 		std::vector<Building*> structures = std::vector<Building*>();
+
 	public:
 		Landable();
 		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures);
 		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor);
-		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, void(*operation)(Player* player, MonopolyEvent event));
+		Landable(std::string name, Money price, bool isBuyable, bool canHaveStructures, PropertyColor propColor, std::function<void(Landable* landable, Player* player, MonopolyEvent event)> operation);
 		MonopolyDecision onLand(Player* player);
 		PropertyColor getColorID();
 		void addStructure(Building* building);
 		bool purchaseStructure(Player* player);
-		void(*onLandBehavior)(Player* player, MonopolyEvent event);
+		std::function<void(Landable* landable, Player* player, MonopolyEvent event)> onLandBehavior;
 		bool isBuyable();
 		bool canHaveStructures();
 		bool isReadyForHotel();

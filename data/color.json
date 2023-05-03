@@ -1,55 +1,90 @@
 {
-    "groups": [
-      {
-        "id": 0,
-        "colorName": "Brown",
-        "numberOfProperties": 2
-      },
-      {
-        "id": 1,
-        "colorName": "Light Blue",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 2,
-        "colorName": "Pink",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 3,
-        "colorName": "Orange",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 4,
-        "colorName": "Red",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 5,
-        "colorName": "Yellow",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 6,
-        "colorName": "Green",
-        "numberOfProperties": 3
-      },
-      {
-        "id": 7,
-        "colorName": "Blue",
-        "numberOfProperties": 2
-      },
-      {
-        "id": 8,
-        "colorName": "Railroad",
-        "numberOfProperties": 4
-      },
-      {
-        "id": 9,
-        "colorName": "Utility",
-        "numberOfProperties": 2
-      }
-    ]
+  "groups": [
+    {
+      "id": 0,
+      "colorName": "Brown",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 1,
+      "colorName": "Light Blue",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 2,
+      "colorName": "Pink",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 3,
+      "colorName": "Orange",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 4,
+      "colorName": "Red",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 5,
+      "colorName": "Yellow",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 6,
+      "colorName": "Green",
+      "numberOfProperties": 3
+    },
+    {
+      "id": 7,
+      "colorName": "Blue",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 8,
+      "colorName": "Railroad",
+      "numberOfProperties": 4
+    },
+    {
+      "id": 9,
+      "colorName": "Utility",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 10,
+      "colorName": "Community Chest",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 11,
+      "colorName": "Chance",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 12,
+      "colorName": "Tax",
+      "numberOfProperties": 2
+    },
+    {
+      "id": 13,
+      "colorName": "Jail",
+      "numberOfProperties": 1
+    },
+    {
+      "id": 14,
+      "colorName": "Free Parking",
+      "numberOfProperties": 1
+    },
+    {
+      "id": 15,
+      "colorName": "Go To Jail",
+      "numberOfProperties": 1
+    },
+    {
+      "id": 16,
+      "colorName": "Undefinied",
+      "numberOfProperties": 0
+    }
+  ]
   }
   

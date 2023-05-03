@@ -6,6 +6,7 @@
 #include <ios>
 #include <thread>
 #include <chrono>         // std::chrono::seconds
+#include <functional>
 
 using namespace Monopoly;
 using json = nlohmann::json;
@@ -22,6 +23,7 @@ namespace Monopoly
 
     void importSpacesJson(Landable* array, size_t size);
     void displaySpaces(Landable* array, size_t size);
+    int generateRandomDiceNumber();
     /**
      * @brief Construct a new Monopoly Game:: Monopoly Game object
      * 
@@ -37,16 +39,73 @@ namespace Monopoly
 
     void importSpacesJson(Landable array[], size_t size) {
         std::ifstream f("data/spaces.json");
-
+        std::ifstream z("data/color.json");
         json data = json::parse(f)["spaces"];
+        json color_data = json::parse(z)["groups"];
         int i = 0;
-        auto lambda = [](Player* player, MonopolyEvent event){
-            player->notifyDecision(event);
-        };
+
         for(auto it : data){
             if(i > 40) break;
-            std::string name = it["name"].get<std::string>();
-            array[i++] = Landable(name, 500, true, true, PropertyColor(0, 10), lambda); 
+            std::string _j_name = it["name"].get<std::string>();
+            bool _j_buyable = it["buyable"].get<bool>();
+            int _j_groupID = 0;
+            int _j_money = 0;
+            try {
+                _j_groupID = it["group"].get<int>();
+                _j_money = it["price"].get<double>();
+            }
+            catch (json::exception err) {
+                _j_groupID = -1;
+                _j_money = -1;
+                std::cout << "JSON ERROR : " << err.what() << std::endl;
+            }
+            PropertyColor ppc = PropertyColor(_j_groupID, color_data.at(_j_groupID)["numberOfProperties"].get<int>());
+            bool _j_structureable = _j_buyable && _j_groupID != 10 && _j_groupID != 11 ? true : false;
+            std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [](Landable* landable, Player* player, MonopolyEvent event) {};
+
+            switch (_j_groupID) {
+                case 9:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        printf("\n!Rolling Again...!\n");
+                        int roll = generateRandomDiceNumber();
+                        int roll2 = generateRandomDiceNumber();
+                        int result = roll + roll2;
+                        player->takeMoney(result * 4);
+                        landable->getOwner()->addMoney(result * 4);
+                        printf("%s had to pay %d to %s\n", player->getName().c_str(), result * 4, landable->getOwner()->getName().c_str());
+                    };
+                    break;
+                case 10:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        printf("\n!COMMUNITY CARD!\n");
+                        //pull card out, then send to player.
+                        //run card function using lua.
+                    };
+                    break;
+                case 11:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        printf("\n!CHANCE CARD!\n");
+                        //pull card out, then send to player.
+                        //run card function using lua.
+                    };
+                    break;
+                case 12:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        //tax;
+                        printf("%s time time to pay : $%d!!!\n", landable->name.c_str(), landable->getPrice());
+                        player->takeMoney(landable->getPrice());
+                    };
+                    break;
+                case 16:
+                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                        player->addMoney(800);
+                    };
+                    break;
+                default:
+                    break;
+            }
+            array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, PropertyColor(0, 10), lambda);
+
         }
     }
 
