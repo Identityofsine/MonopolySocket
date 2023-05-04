@@ -80,22 +80,34 @@ local chance_cards = {
         text = "Advance to Go (Collect $400)",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            player:addMoney(200)
+            engine_moveplayer((40 - player:getPosition() + 1));
             --debug
-            print(string.format("[LUA] : added 200 to player: %s", player:getName()))
+            print(string.format("[LUA] : moved player %s to GO", player:getName()))
         end
     },
     {
         text = "Advance to Illinois Ave. - If you pass Go, collect $400",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            
+            local IllinoisIndex = 24
+            if player:getPosition() < IllinoisIndex then
+                engine_moveplayer((IllinoisIndex - player:getPosition()))
+            else
+                engine_moveplayer(((40 - player:getPosition() + 1) + IllinoisIndex))
+            end
+
         end
     },
     {
         text = "Advance to St. Charles Place – If you pass Go, collect $200",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            local CharlesIndex = 11
+            if player:getPosition() < CharlesIndex then
+                engine_moveplayer((CharlesIndex - player:getPosition()))
+            else
+                engine_moveplayer(((40 - player:getPosition() + 1) + CharlesIndex))
+            end
         end
     },
     {
@@ -115,6 +127,8 @@ local chance_cards = {
         action = function(player)
             -- TODO: Implement the action for this Chance card
             player:addMoney(50)
+            --debug
+            print("[LUA] : added $50 to player : %s", player:getName())
         end
     },
     {
@@ -127,7 +141,7 @@ local chance_cards = {
         text = "Go Back 3 Spaces",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            engine_move(-3)
+            engine_moveplayer(-3)
             print(string.format("[LUA] : moved player (%s), back 3 spaces", player:getName()))
 
         end
@@ -148,6 +162,9 @@ local chance_cards = {
         text = "Pay poor tax of $15",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            player:takeMoney(15)
+            --debug
+            print("[LUA] : Took $15 from player : %s", player:getName())
         end
     },
     {
@@ -162,6 +179,12 @@ local chance_cards = {
         text = "Take a walk on the Boardwalk – Advance token to Boardwalk",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            local BroadWalk = 39
+            if player:getPosition() < BroadWalk then
+                engine_moveplayer((BroadWalk - player:getPosition()))
+            else
+                engine_moveplayer(((40 - player:getPosition() + 1) + BroadWalk))
+            end
         end
     },
     {

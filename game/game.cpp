@@ -180,7 +180,6 @@ namespace Monopoly
             printf("You Rolled a : %d\n", result);
             movePlayer(player, result);
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
         }
 
     }
@@ -272,7 +271,6 @@ namespace Monopoly
         int playerPOS = player->getPosition();
         MonopolyDecision _response = this->spaces[playerPOS].onLand(player);
         handleMonopolyDecision(_response, player, &(this->spaces[playerPOS]));
-        // printf("%s is now at %s\n", player->getName().c_str(), this->spaces[playerPOS].name.c_str());
         return true;
     }
 
@@ -290,8 +288,7 @@ namespace Monopoly
             d2 = generateRandomDiceNumber();
             if (d1 == d2) {
                 //doubles
-                printf("%s got Doubles! \n", player->getName().c_str())
-                ;
+                printf("%s got Doubles! \n", player->getName().c_str());
             }
             else {
                 if(playerIndex + 1 >= this->players.size())

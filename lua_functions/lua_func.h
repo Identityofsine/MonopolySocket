@@ -72,7 +72,7 @@ void importLuaFunction(lua_State* L) {
 
 using namespace luabridge;
 void pullChanceCard(lua_State* L, Player* player, std::function<void(Player* player, int spaces)> engine_move ) {
-	lua_State* chance_script = L;
+	lua_State* chance_script = loadLuaChanceCard();
 	importPlayerStructureIntoLua(chance_script);
   std::function<void(int spaces)> lambda = [&player, &engine_move](int spaces) {
       if(engine_move != nullptr) {
