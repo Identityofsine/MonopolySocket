@@ -4,6 +4,7 @@
 #include "../objects/gameobjects.h"
 #include <iostream>
 #include <random>
+#include <functional>
 
 int testAdd(int x, int y) {
 	return x + y;
@@ -35,6 +36,10 @@ void importPlayerStructureIntoLua(lua_State* L) {
     .endClass();
 }
 
+void importLandableStructureIntoLua(lua_State* L) {
+
+}
+
 int lua_randomnumber(int l, int r) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -56,7 +61,7 @@ lua_State* loadLuaChanceCard() {
 }
 
 using namespace luabridge;
-void pullChanceCard(Player* player) {
+void pullChanceCard(Player* player, std::function<void(Player* player, int spaces)> engine_move ) {
 	lua_State* chance_script = loadLuaChanceCard();
 	importPlayerStructureIntoLua(chance_script);
 	LuaRef grabChanceCard = getGlobal(chance_script, "PullChanceCard");

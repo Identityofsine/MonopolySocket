@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.c": "c",
         "__bit_reference": "cpp",
         "__bits": "cpp",
         "__config": "cpp",
@@ -75,6 +76,8 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "iterator": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "list": "cpp",
+        "random": "cpp"
     }
 }

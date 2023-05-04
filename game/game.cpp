@@ -26,7 +26,7 @@ namespace Monopoly
 
 
 
-    void importSpacesJson(Landable* array, size_t size);
+    void importSpacesJson(Landable* array, size_t size, MonopolyGame* engine);
     void displaySpaces(Landable* array, size_t size);
     int generateRandomDiceNumber();
     /**
@@ -36,7 +36,7 @@ namespace Monopoly
     MonopolyGame::MonopolyGame(unsigned int gameID) {
         this->gameID = gameID;
         this->spaces = new Landable[40];
-        importSpacesJson(this->spaces, 40);
+        importSpacesJson(this->spaces, 40, this);
         //displaySpaces(this->spaces, 40);
         //load json into memory
 
@@ -50,7 +50,7 @@ namespace Monopoly
      * @param array 
      * @param size 
      */
-    void importSpacesJson(Landable array[], size_t size) {
+    void importSpacesJson(Landable array[], size_t size, MonopolyGame* engine) {
         std::ifstream f("data/spaces.json");
         std::ifstream z("data/color.json");
         json data = json::parse(f)["spaces"]; // all the spaces in spaces.json
@@ -78,7 +78,7 @@ namespace Monopoly
             bool _j_structureable = _j_buyable && _j_groupID != 10 && _j_groupID != 11 ? true : false;
             //Labmda function used for unique behavior, such as landing on GO or going to jail, etc.
             //using auto lambda = [](args){}; was a possibility but it wasn't possible to change lambda after inital assignment.  
-            std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [](Landable* landable, Player* player, MonopolyEvent event) {};
+            std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {};
 
             //switch ID (mapped to color.json)
             switch (_j_groupID) {
@@ -103,11 +103,14 @@ namespace Monopoly
                     };
                     break;
                 case 11: //Chance
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                    lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
                         printf("\n!CHANCE CARD!\n");
                         //pull card out, then send to player.
                         //run card function using lua.
-                        pullChanceCard(player);
+                        auto engine_move = [&engine](Player* player, int spaces) {
+                            engine->movePlayer(player, spaces);
+                        };
+                        pullChanceCard(player, engine_move);
 
                     };
                     break;
@@ -126,8 +129,11 @@ namespace Monopoly
                     };
                     break;
                 default:
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        pullChanceCard(player);
+                    lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
+                        auto engine_move = [&engine](Player* player, int spaces) {
+                            engine->movePlayer(player, spaces);
+                        };
+                        pullChanceCard(player, engine_move);
                     };
                     break;
             }
