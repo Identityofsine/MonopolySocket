@@ -9,7 +9,8 @@ using namespace Monopoly;
 
 int main()
 {
-
+    
+    
     MonopolyGame game = MonopolyGame(4235123);
     Player kevin = Player("Kevin", 0);
     Player gabe = Player("Gabe", 0);

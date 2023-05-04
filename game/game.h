@@ -29,7 +29,7 @@ namespace Monopoly{
         MonopolyGame(unsigned int gameID);
         bool addPlayer(Player* player);
         bool startGame(MonopolyRules monopolyRules);
-        bool movePlayer(Player* player, int spaces);
+        bool movePlayer(Player* player, int spaces, bool fromLUA = false);
         std::pair<int, int> rollDice(Player* player);
         void runEngine();
         void handleMonopolyDecision(MonopolyDecision event, Player* player, Landable* spot);

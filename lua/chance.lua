@@ -80,7 +80,7 @@ local chance_cards = {
         text = "Advance to Go (Collect $400)",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            engine_moveplayer((40 - player:getPosition() + 1));
+            engine_moveplayer((39 - player:getPosition()));
             --debug
             print(string.format("[LUA] : moved player %s to GO", player:getName()))
         end
@@ -93,7 +93,7 @@ local chance_cards = {
             if player:getPosition() < IllinoisIndex then
                 engine_moveplayer((IllinoisIndex - player:getPosition()))
             else
-                engine_moveplayer(((40 - player:getPosition() + 1) + IllinoisIndex))
+                engine_moveplayer(((39 - player:getPosition() ) + IllinoisIndex))
             end
 
         end
@@ -106,7 +106,7 @@ local chance_cards = {
             if player:getPosition() < CharlesIndex then
                 engine_moveplayer((CharlesIndex - player:getPosition()))
             else
-                engine_moveplayer(((40 - player:getPosition() + 1) + CharlesIndex))
+                engine_moveplayer(((39 - player:getPosition() ) + CharlesIndex))
             end
         end
     },
@@ -114,12 +114,26 @@ local chance_cards = {
         text = "Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total ten times the amount thrown.",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            local WaterWorks = 28
+            if player:getPosition() < WaterWorks then
+                engine_moveplayer((WaterWorks - player:getPosition()))
+            else
+                engine_moveplayer(((39 - player:getPosition() ) + WaterWorks))
+            end
+            print(string.format("[LUA] moved : %s to WaterWorks (pos: %d (exp: %d))", player:getName(), player:getPosition(), WaterWorks))
         end
     },
     {
         text = "Advance token to the nearest Railroad and pay owner twice the rental to which they are otherwise entitled. If Railroad is unowned, you may buy it from the Bank.",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            local ReadingRailRoad = 5
+            if player:getPosition() < ReadingRailRoad then
+                engine_moveplayer((ReadingRailRoad - player:getPosition()))
+            else
+                engine_moveplayer(((39 - player:getPosition() ) + ReadingRailRoad))
+            end
+            print(string.format("[LUA] moved : %s to Boardwalk (pos: %d (exp: %d))", player:getName(), player:getPosition(), ReadingRailRoad))
         end
     },
     {
@@ -135,6 +149,7 @@ local chance_cards = {
         text = "Get Out of Jail Free – This card may be kept until needed, or sold",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            
         end
     },
     {
@@ -172,19 +187,26 @@ local chance_cards = {
         action = function(player)
             -- TODO: Implement the action for this Chance card
             -- TODO: Implement the action for this Chance card
-
+            local ReadingRailRoad = 5
+            if player:getPosition() < ReadingRailRoad then
+                engine_moveplayer((ReadingRailRoad - player:getPosition()))
+            else
+                engine_moveplayer(((39 - player:getPosition() ) + ReadingRailRoad))
+            end
+            print(string.format("[LUA] moved : %s to Reading RailRoad (pos: %d (exp: %d))", player:getName(), player:getPosition(), ReadingRailRoad))
         end
     },
     {
         text = "Take a walk on the Boardwalk – Advance token to Boardwalk",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            local BroadWalk = 39
-            if player:getPosition() < BroadWalk then
-                engine_moveplayer((BroadWalk - player:getPosition()))
+            local BoardWalk = 39
+            if player:getPosition() < BoardWalk then
+                engine_moveplayer((BoardWalk - player:getPosition()))
             else
-                engine_moveplayer(((40 - player:getPosition() + 1) + BroadWalk))
+                engine_moveplayer(((39 - player:getPosition() ) + BoardWalk))
             end
+            print(string.format("[LUA] moved : %s to Boardwalk (pos: %d (exp: %d))", player:getName(), player:getPosition(), BoardWalk))
         end
     },
     {
@@ -216,6 +238,8 @@ local chance_cards = {
 --@tparam player Player
 function PullChanceCard(player)
     local card = chance_cards[random(1, #chance_cards)]
-    print(string.format("LUA FUNCTION [PullChanceCard]: EXECUTED FOR %s\nCARD: %s\n", player:getName(), card.text));
     card.action(player)
+    print(string.format("LUA FUNCTION [PullChanceCard]: EXECUTED FOR %s\nCARD: %s\n", player:getName(), card.text));
+
 end
+

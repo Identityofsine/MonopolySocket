@@ -245,6 +245,12 @@ namespace Monopoly {
 				return false;
 		}
 	}
+
+
+	void Landable::setLandBehavior(std::function<void(Landable* landable, Player* player, MonopolyEvent event)> behavior) {
+		this->onLandBehavior = behavior;
+	}
+
 	/**
 	 * @brief Is this buyable?
 	 * 

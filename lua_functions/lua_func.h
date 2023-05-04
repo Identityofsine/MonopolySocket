@@ -60,7 +60,6 @@ lua_State* loadLuaChanceCard() {
 	return l_chance;
 }
 
-
 /**
 * @brief Do not use unless lua_state is initialized
 */
@@ -83,7 +82,7 @@ void pullChanceCard(lua_State* L, Player* player, std::function<void(Player* pla
   .addFunction("engine_moveplayer", lambda);
 	LuaRef grabChanceCard = getGlobal(chance_script, "PullChanceCard");
 	grabChanceCard(&player);
-	lua_close(chance_script);
+	//lua_close(chance_script);
 }
 
 /**

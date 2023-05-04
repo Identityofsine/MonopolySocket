@@ -9,8 +9,17 @@
 #include <chrono>         // std::chrono::seconds
 #include <functional>
 
+#define TICK_RATE_MS 750
+
+#ifdef _WIN32
+#include <cstdlib>
+#endif
+
+
 using namespace Monopoly;
 using json = nlohmann::json;
+
+
 
 
 namespace Monopoly
@@ -27,6 +36,8 @@ namespace Monopoly
 
 
     void importSpacesJson(Landable* array, size_t size, MonopolyGame* engine);
+    void LinkLuaIntoLandable(Landable* array, size_t size, MonopolyGame* engine);
+
     void displaySpaces(Landable* array, size_t size);
     int generateRandomDiceNumber();
     /**
@@ -36,7 +47,8 @@ namespace Monopoly
     MonopolyGame::MonopolyGame(unsigned int gameID) {
         this->gameID = gameID;
         this->spaces = new Landable[40];
-        importSpacesJson(this->spaces, 40, this);
+        MonopolyGame* engine_ptr = this; // Declare a pointer to the instance
+        importSpacesJson(this->spaces, 40, engine_ptr);
         //displaySpaces(this->spaces, 40);
         //load json into memory
 
@@ -78,74 +90,75 @@ namespace Monopoly
             bool _j_structureable = _j_buyable && _j_groupID != 10 && _j_groupID != 11 ? true : false;
             //Labmda function used for unique behavior, such as landing on GO or going to jail, etc.
             //using auto lambda = [](args){}; was a possibility but it wasn't possible to change lambda after inital assignment.  
-            std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {};
-
-            //switch ID (mapped to color.json)
-            switch (_j_groupID) {
-                case 9: //Utility
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        if (!landable->isOwned()) return;
-                        printf("\n!Rolling Again...!\n");
-                        int roll = generateRandomDiceNumber();
-                        int roll2 = generateRandomDiceNumber();
-                        int result = roll + roll2;
-                        result = result * 4;
-                        player->takeMoney(result);
-                        landable->getOwner()->addMoney(result);
-                        printf("%s had to pay %d to %s\n", player->getName().c_str(), result, landable->getOwner()->getName().c_str());
-                    };
-                    break;
-                case 10: //Community Chest
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        printf("\n!COMMUNITY CARD!\n");
-                        //pull card out, then send to player.
-                        //run card function using lua.
-                    };
-                    break;
-                case 11: //Chance
-                    lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
-                        printf("\n!CHANCE CARD!\n");
-                        //pull card out, then send to player.
-                        //run card function using lua.
-                        std::function<void(Player* player, int spaces)> engine_move = [&engine](Player* player, int spaces) {
-                            std::cout << "\nENGINE_MOVE_RAN" << std::endl;
-                            player->setPosition(player->getPosition() + spaces);
-                            engine->movePlayer(player, player->getPosition());
-                        };
-                        lua_State* state = loadLuaChanceCard();
-                        pullChanceCard(state, player, engine_move);
-                    };
-                    break;
-                case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        //tax;
-                        printf("%s time time to pay : $%d!!!\n", landable->name.c_str(), landable->getPrice());
-                        player->takeMoney(landable->getPrice());
-                    };
-                    break;
-                case 16: //GO
-                    lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
-                        printf("%s landed on go, heres 400 dollars!\n", player->getName().c_str());
-
-                        player->addMoney(400);
-                    };
-                    break;
-                default:
-                    lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
-                        std::function<void(Player* player, int spaces)> engine_move = [&engine, landable](Player* player, int spaces) {
-                            std::cout << "\nENGINE_MOVE_RAN" << std::endl;
-                            player->setPosition(player->getPosition() + spaces);
-                            engine->movePlayer(player, player->getPosition());
-                        };
-                        lua_State* state = loadLuaChanceCard();
-                        pullChanceCard(state, player, engine_move);
-                    };
-                    break;
-            }
-            array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, ppc, lambda); 
-
+ 
+            array[i++] = Landable(_j_name, _j_money, _j_buyable, _j_structureable, ppc); 
         }
     }
+
+    void LinkLuaIntoLandable(Landable arr[], size_t size, MonopolyGame engine) {
+        for (int i = 0; i < size; i++) {
+            auto spot = arr[i];
+            std::function<void(Landable* landable, Player* player, MonopolyEvent event)> lambda = [engine](Landable* landable, Player* player, MonopolyEvent event) {};
+
+            //switch ID (mapped to color.json)
+            switch (spot.getColorID().getColorID()) {
+            case 9: //Utility
+                lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                    if (!landable->isOwned()) return;
+                    printf("\n!Rolling Again...!\n");
+                    int roll = generateRandomDiceNumber();
+                    int roll2 = generateRandomDiceNumber();
+                    int result = roll + roll2;
+                    result = result * 4;
+                    player->takeMoney(result);
+                    landable->getOwner()->addMoney(result);
+                    printf("%s had to pay %d to %s\n", player->getName().c_str(), result, landable->getOwner()->getName().c_str());
+                };
+                break;
+            case 10: //Community Chest
+                lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                    printf("\n!COMMUNITY CARD!\n");
+                    //pull card out, then send to player.
+                    //run card function using lua.
+                };
+                break;
+            case 11: //Chance
+                lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
+                    printf("\n!CHANCE CARD!\n");
+                    //pull card out, then send to player.
+                    //run card function using lua.
+                    std::function<void(Player* player, int spaces)> engine_move = [&engine](Player* player, int spaces) {
+                        std::cout << "\nENGINE_MOVE_RAN" << std::endl;
+                        engine.movePlayer(player, spaces, true);
+                    };
+                    lua_State* state = loadLuaChanceCard();
+                    pullChanceCard(state, player, engine_move);
+                };
+                break;
+            case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
+                lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                    //tax;
+                    printf("%s time time to pay : $%d!!!\n", landable->name.c_str(), landable->getPrice());
+                    player->takeMoney(landable->getPrice());
+                };
+                break;
+            case 16: //GO
+                lambda = [](Landable* landable, Player* player, MonopolyEvent event) {
+                    printf("%s landed on go, heres 400 dollars!\n", player->getName().c_str());
+
+                    player->addMoney(400);
+                };
+                break;
+            default:
+                lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
+
+                };
+                break;
+            }
+            arr[i].setLandBehavior(lambda);
+        }
+    }
+
 
     /**
      * 
@@ -172,14 +185,18 @@ namespace Monopoly
      * 
      */
     void MonopolyGame::runEngine() {
+        LinkLuaIntoLandable(this->spaces, 40, *this);
         while (this->hasStarted) {
             ; //tick
             Player* player = playerInTurn;
+            #ifdef _WIN32
+            system("cls");
+            #endif
             player->notifyTurn();
             int result = combinePair(rollDice(player));
             printf("You Rolled a : %d\n", result);
             movePlayer(player, result);
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MS));
         }
 
     }
@@ -260,17 +277,18 @@ namespace Monopoly
      * @return true 
      * @return false 
      */
-    bool MonopolyGame::movePlayer(Player* player, int spaces) {
+    bool MonopolyGame::movePlayer(Player* player, int spaces, bool fromLUA) {
         if (!hasStarted) return false;
         if (player->inJail()) return false;
-        if ((player->getPosition() + spaces + 1) < 40)
-            player->setPosition(player->getPosition() + spaces + 1);
+        if ((player->getPosition() + spaces) < 40)
+            player->setPosition(player->getPosition() + spaces);
         else {
             player->setPosition(player->getPosition() + spaces - 39);
         }
         int playerPOS = player->getPosition();
         MonopolyDecision _response = this->spaces[playerPOS].onLand(player);
-        handleMonopolyDecision(_response, player, &(this->spaces[playerPOS]));
+        if(!fromLUA)
+            handleMonopolyDecision(_response, player, &(this->spaces[playerPOS]));
         return true;
     }
 

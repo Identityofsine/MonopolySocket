@@ -91,6 +91,7 @@ namespace Monopoly {
 		bool isBuyable();
 		bool canHaveStructures();
 		bool isReadyForHotel();
+		void setLandBehavior(std::function<void(Landable* landable, Player* player, MonopolyEvent event)> behavior);
 	};
 
 	struct Jail : public Landable {
@@ -140,7 +141,7 @@ namespace Monopoly {
 		Money money;
 		std::vector<Landable*> ownedProperties = std::vector<Landable*>();
 		bool isInJail;
-		int position = -1;
+		int position = 0;
 	public:
 		Player();
 		Player(std::string name, Money startingMoney);
