@@ -108,7 +108,7 @@ namespace Monopoly
                         //pull card out, then send to player.
                         //run card function using lua.
                         std::function<void(Player* player, int spaces)> engine_move = [&engine](Player* player, int spaces) {
-                            std::cout << "ENGINE_MOVE_RAN" << std::endl;
+                            std::cout << "\nENGINE_MOVE_RAN" << std::endl;
                             player->setPosition(player->getPosition() + spaces);
                             engine->movePlayer(player, player->getPosition());
                         };
@@ -133,7 +133,7 @@ namespace Monopoly
                 default:
                     lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
                         std::function<void(Player* player, int spaces)> engine_move = [&engine, landable](Player* player, int spaces) {
-                            std::cout << "ENGINE_MOVE_RAN" << std::endl;
+                            std::cout << "\nENGINE_MOVE_RAN" << std::endl;
                             player->setPosition(player->getPosition() + spaces);
                             engine->movePlayer(player, player->getPosition());
                         };
