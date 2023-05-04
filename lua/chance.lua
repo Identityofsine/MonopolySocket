@@ -164,7 +164,7 @@ local chance_cards = {
             -- TODO: Implement the action for this Chance card
             player:takeMoney(15)
             --debug
-            print("[LUA] : Took $15 from player : %s", player:getName())
+            print(string.format("[LUA] : Took $15 from player : %s", player:getName()))
         end
     },
     {
@@ -216,6 +216,6 @@ local chance_cards = {
 --@tparam player Player
 function PullChanceCard(player)
     local card = chance_cards[random(1, #chance_cards)]
-    card.action(player)
     print(string.format("LUA FUNCTION [PullChanceCard]: EXECUTED FOR %s\nCARD: %s\n", player:getName(), card.text));
+    card.action(player)
 end

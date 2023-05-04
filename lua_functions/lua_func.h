@@ -84,7 +84,6 @@ void pullChanceCard(lua_State* L, Player* player, std::function<void(Player* pla
 	LuaRef grabChanceCard = getGlobal(chance_script, "PullChanceCard");
 	grabChanceCard(&player);
 	lua_close(chance_script);
-
 }
 
 /**
