@@ -60,13 +60,31 @@ lua_State* loadLuaChanceCard() {
 	return l_chance;
 }
 
+
+/**
+* @brief Do not use unless lua_state is initialized
+*/
+void importLuaFunction(lua_State* L) {
+  luabridge::getGlobalNamespace(L)
+	.addFunction("print", &simplePrint)
+	.addFunction("random", &lua_randomnumber);
+}
+
 using namespace luabridge;
-void pullChanceCard(Player* player, std::function<void(Player* player, int spaces)> engine_move ) {
-	lua_State* chance_script = loadLuaChanceCard();
+void pullChanceCard(lua_State* L, Player* player, std::function<void(Player* player, int spaces)> engine_move ) {
+	lua_State* chance_script = L;
 	importPlayerStructureIntoLua(chance_script);
+  std::function<void(int spaces)> lambda = [&player, &engine_move](int spaces) {
+      if(engine_move != nullptr) {
+        engine_move(player, spaces);
+      }
+    };
+  luabridge::getGlobalNamespace(chance_script)
+  .addFunction("engine_moveplayer", lambda);
 	LuaRef grabChanceCard = getGlobal(chance_script, "PullChanceCard");
 	grabChanceCard(&player);
 	lua_close(chance_script);
+
 }
 
 /**

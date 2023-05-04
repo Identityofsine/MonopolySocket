@@ -107,11 +107,13 @@ namespace Monopoly
                         printf("\n!CHANCE CARD!\n");
                         //pull card out, then send to player.
                         //run card function using lua.
-                        auto engine_move = [&engine](Player* player, int spaces) {
-                            engine->movePlayer(player, spaces);
+                        std::function<void(Player* player, int spaces)> engine_move = [&engine](Player* player, int spaces) {
+                            std::cout << "ENGINE_MOVE_RAN" << std::endl;
+                            player->setPosition(player->getPosition() + spaces);
+                            engine->movePlayer(player, player->getPosition());
                         };
-                        pullChanceCard(player, engine_move);
-
+                        lua_State* state = loadLuaChanceCard();
+                        pullChanceCard(state, player, engine_move);
                     };
                     break;
                 case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
@@ -130,10 +132,13 @@ namespace Monopoly
                     break;
                 default:
                     lambda = [&engine](Landable* landable, Player* player, MonopolyEvent event) {
-                        auto engine_move = [&engine](Player* player, int spaces) {
-                            engine->movePlayer(player, spaces);
+                        std::function<void(Player* player, int spaces)> engine_move = [&engine, landable](Player* player, int spaces) {
+                            std::cout << "ENGINE_MOVE_RAN" << std::endl;
+                            player->setPosition(player->getPosition() + spaces);
+                            engine->movePlayer(player, player->getPosition());
                         };
-                        pullChanceCard(player, engine_move);
+                        lua_State* state = loadLuaChanceCard();
+                        pullChanceCard(state, player, engine_move);
                     };
                     break;
             }

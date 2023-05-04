@@ -81,6 +81,8 @@ local chance_cards = {
         action = function(player)
             -- TODO: Implement the action for this Chance card
             player:addMoney(200)
+            --debug
+            print(string.format("[LUA] : added 200 to player: %s", player:getName()))
         end
     },
     {
@@ -125,7 +127,9 @@ local chance_cards = {
         text = "Go Back 3 Spaces",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            
+            engine_move(-3)
+            print(string.format("[LUA] : moved player (%s), back 3 spaces", player:getName()))
+
         end
     },
     {
@@ -150,6 +154,8 @@ local chance_cards = {
         text = "Take a trip to Reading Railroad – If you pass Go, collect $200",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            -- TODO: Implement the action for this Chance card
+
         end
     },
     {
@@ -168,12 +174,18 @@ local chance_cards = {
         text = "Your building loan matures – Collect $150",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            player:addMoney(150)
+            --debug
+            print(string.format("[LUA] : added 150 to player: %s", player:getName()))
         end
     },
     {
         text = "You have won a crossword competition - Collect $100",
         action = function(player)
             -- TODO: Implement the action for this Chance card
+            player:addMoney(100)
+            --debug
+            print(string.format("[LUA] : added 100 to player: %s", player:getName()))
         end
     }
 }
