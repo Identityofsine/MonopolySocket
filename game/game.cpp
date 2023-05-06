@@ -195,7 +195,9 @@ namespace Monopoly
             player->notifyTurn();
             int result = combinePair(rollDice(player));
             printf("You Rolled a : %d\n", result);
-            movePlayer(player, result);
+            MonopolyDecision _response = movePlayer(player, result);
+            handleMonopolyDecision(_response, player, &(this->spaces[player->getPosition()]));
+
             std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE_MS));
         }
 
@@ -277,9 +279,9 @@ namespace Monopoly
      * @return true 
      * @return false 
      */
-    bool MonopolyGame::movePlayer(Player* player, int spaces, bool fromLUA) {
-        if (!hasStarted) return false;
-        if (player->inJail()) return false;
+    MonopolyDecision MonopolyGame::movePlayer(Player* player, int spaces, bool fromLUA) {
+        if (!hasStarted) return IGNORE;
+        if (player->inJail()) return IGNORE;
         if ((player->getPosition() + spaces) < 40)
             player->setPosition(player->getPosition() + spaces);
         else {
@@ -287,9 +289,8 @@ namespace Monopoly
         }
         int playerPOS = player->getPosition();
         MonopolyDecision _response = this->spaces[playerPOS].onLand(player);
-        if(!fromLUA)
-            handleMonopolyDecision(_response, player, &(this->spaces[playerPOS]));
-        return true;
+        // if(!fromLUA)
+        return _response;
     }
 
 
