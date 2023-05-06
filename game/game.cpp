@@ -191,7 +191,10 @@ namespace Monopoly
             Player* player = playerInTurn;
             #ifdef _WIN32
             system("cls");
+            #else
+            system("clear");
             #endif
+     
             player->notifyTurn();
             int result = combinePair(rollDice(player));
             printf("You Rolled a : %d\n", result);
