@@ -127,12 +127,16 @@ namespace Monopoly
                     printf("\n!CHANCE CARD!\n");
                     //pull card out, then send to player.
                     //run card function using lua.
+                    std::vector<EngineMethod<Player*, int>> chanceMethods = std::vector<EngineMethod<Player*, int>>();
+
                     std::function<void(Player* player, int spaces)> engine_move = [&engine](Player* player, int spaces) {
                         std::cout << "\nENGINE_MOVE_RAN" << std::endl;
                         engine.movePlayer(player, spaces, true);
                     };
+
+                    chanceMethods.emplace_back("engine_moveplayer", engine_move);
                     lua_State* state = loadLuaChanceCard();
-                    pullChanceCard(state, player, engine_move);
+                    pullChanceCard<Player*, int>(state, player, chanceMethods);
                 };
                 break;
             case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
