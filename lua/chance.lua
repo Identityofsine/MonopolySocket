@@ -80,7 +80,7 @@ local chance_cards = {
         text = "Advance to Go (Collect $400)",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            engine_moveplayer((39 - player:getPosition()));
+            engine_moveplayer((40 - player:getPosition()));
             --debug
             print(string.format("[LUA] : moved player %s to GO", player:getName()))
         end
@@ -155,7 +155,6 @@ local chance_cards = {
     {
         text = "Go Back 3 Spaces",
         action = function(player)
-            -- TODO: Implement the action for this Chance card
             engine_moveplayer(-3)
             print(string.format("[LUA] : moved player (%s), back 3 spaces", player:getName()))
 
@@ -238,8 +237,8 @@ local chance_cards = {
 --@tparam player Player
 function PullChanceCard(player)
     local card = chance_cards[random(1, #chance_cards)]
-    card.action(player)
     print(string.format("LUA FUNCTION [PullChanceCard]: EXECUTED FOR %s\nCARD: %s\n", player:getName(), card.text));
+    card.action(player)
 
 end
 

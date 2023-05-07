@@ -297,6 +297,18 @@ namespace Monopoly
     }
 
 
+    bool MonopolyGame::taxPlayer(Player* player, Money amount) {
+        const bool takenMoney = player->takeMoney(amount);
+        if (!takenMoney) return false; //handle logic for morgating
+        this->pot += amount;
+    }
+
+    void MonopolyGame::givePlayerPot(Player* player) {
+        if (player->inJail()) return;
+        player->addMoney(this->pot);
+        this->pot = 0;
+    }
+
     /**
      * @brief Roll dice is the heart of movement for the game. This function rolls two numbers and checks if they are doubles. This function is also responsible for changing the turn of the player. It returns the dice roll the player gets in a pair object
      * 

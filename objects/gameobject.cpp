@@ -179,6 +179,8 @@ namespace Monopoly {
 			if(!this->buyable){
 				//event = MonopolyEvent::TAX;
 				//player->takeMoney(100);
+				if (this->getColorID().getColorID() == 11) //if chance card
+					return IGNORE;
 			} else if(this->isOwned()){
 				if (this->getOwner()->getID() == player->getID()) {
 					event = OWNED_LAND;

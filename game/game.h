@@ -20,6 +20,7 @@ namespace Monopoly{
     private:
         unsigned int gameID;
         int playerIndex = 0;
+        Money pot = 0;
         Player* playerInTurn; // this is the player's turn, only listen to him.
         std::vector<Player*> players = std::vector<Player*>();
         std::vector<Player*> notPlaying = std::vector<Player*>(); //this is for players who are either spectating or bankrupt
@@ -34,6 +35,8 @@ namespace Monopoly{
         void runEngine();
         void handleMonopolyDecision(MonopolyDecision event, Player* player, Landable* spot);
         bool buyProperty(Player* player, Landable* spot);
+        bool taxPlayer(Player* player, Money amount);
+        void givePlayerPot(Player* player);
     };
 
 
