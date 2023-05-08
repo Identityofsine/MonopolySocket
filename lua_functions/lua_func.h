@@ -73,22 +73,23 @@ void importLuaFunction(lua_State* L) {
 
 using namespace luabridge;
 template<typename ...args>
-void addEngineFunctionToLua(lua_State* L, std::vector<EngineMethod<args...>> methods) {
-    if (methods.empty()) return;
-    std::function<void()> lambda = [] {
-        printf("\n\n\n move");
-    };
-    for (EngineMethod<args...> d : methods) {
+void addEngineFunctionToLua(lua_State* L, Player* player, std::vector<EngineMethod<args...>>* methods) {
+    if (methods->empty()) return;
+
+    for (EngineMethod<args...>* d = methods->data(); d < methods->data() + methods->size(); ++d) {
+        std::function wrappedMethod = [player,d](int value) {
+            d->method(player, value);
+        };
         luabridge::getGlobalNamespace(L)
-            .addFunction(d.name.c_str(), lambda);
+            .addFunction(d->name.c_str(), wrappedMethod);
     }
 }
 
 template<typename ...args>
-void pullChanceCard(lua_State* L, Player* player, std::vector<EngineMethod<args...>> methods) {
+void pullChanceCard(lua_State* L, Player* player, std::vector<EngineMethod<args...>>* methods) {
 	lua_State* chance_script = loadLuaChanceCard();
 	importPlayerStructureIntoLua(chance_script);
-    addEngineFunctionToLua<args...>(chance_script, methods);
+    addEngineFunctionToLua<args...>(chance_script, player, methods);
 	LuaRef grabChanceCard = getGlobal(chance_script, "PullChanceCard");
     try {
 	    grabChanceCard(&player);

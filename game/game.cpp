@@ -136,7 +136,7 @@ namespace Monopoly
 
                     chanceMethods.emplace_back("engine_moveplayer", engine_move);
                     lua_State* state = loadLuaChanceCard();
-                    pullChanceCard<Player*, int>(state, player, chanceMethods);
+                    pullChanceCard<Player*, int>(state, player, &chanceMethods);
                 };
                 break;
             case 12: //any type of tax (uses the Landable's properties to deal money and debt). In the future, the money will go to the pot.
@@ -194,7 +194,7 @@ namespace Monopoly
             ; //tick
             Player* player = playerInTurn;
             #ifdef _WIN32
-            system("cls");
+            //system("cls");
             #else
             system("clear");
             #endif
