@@ -176,7 +176,7 @@ local chance_cards = {
         text = "Pay poor tax of $15",
         action = function(player)
             -- TODO: Implement the action for this Chance card
-            player:takeMoney(15)
+            engine_taxplayer(15)
             --debug
             print(string.format("[LUA] : Took $15 from player : %s", player:getName()))
         end

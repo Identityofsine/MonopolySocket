@@ -133,8 +133,12 @@ namespace Monopoly
                         std::cout << "\nENGINE_MOVE_RAN" << std::endl;
                         engine.movePlayer(player, spaces, true);
                     };
-
+                    std::function<void(Player* player, int spaces)> taxPlayer = [&engine](Player* player, Money money) {
+                        std::cout << "\nENGINE_TAX_RAN" << std::endl;
+                        engine.taxPlayer(player, money);
+                    };
                     chanceMethods.emplace_back("engine_moveplayer", engine_move);
+                    chanceMethods.emplace_back("engine_taxplayer", taxPlayer);
                     lua_State* state = loadLuaChanceCard();
                     pullChanceCard<Player*, int>(state, player, &chanceMethods);
                 };
