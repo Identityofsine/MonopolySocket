@@ -77,7 +77,7 @@ add_library(lua STATIC
 )
 
 # Add source to this project's executable.
-add_executable (Monopoly "main.cpp" "./objects/player.cpp" "./objects/gameobject.cpp" "./game/game.cpp" "main.h" "lua_functions/lua_func.cpp")
+add_executable (Monopoly "main.cpp" "./objects/player.cpp" "./objects/gameobject.cpp" "./game/game.cpp" "main.h" "lua_functions/lua_func.cpp" "server/server.cpp")
 
 
 
