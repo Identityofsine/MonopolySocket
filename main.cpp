@@ -3,7 +3,7 @@
 #include "objects/gameobjects.h"
 #include "game/game.h"
 #include "main.h"
-#include "server/server.h"
+#include "server/server.hpp"
 #include "includes/jeremyong/selene.h"
 using namespace Monopoly;
 

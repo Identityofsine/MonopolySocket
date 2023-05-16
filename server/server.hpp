@@ -10,5 +10,14 @@
 #include <arpa/inet.h>
 #include <thread>
 namespace MonopolyServer {
+
+    class ServerInstance {
+    private:
+        static ServerInstance* _instance;
+        ServerInstance();
+    public:
+        static ServerInstance getInstance();
+    };
+
     int server();
 }

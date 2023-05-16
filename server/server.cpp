@@ -1,4 +1,4 @@
-#include "server.h"
+#include "server.hpp"
 
 #define PORT 2337
 #define MAX_PLAYERS 24
@@ -107,7 +107,7 @@ int server(){
             printf("[SERVER]A Client disconnected\n");
             
         });
-        
+
         recv_thread.detach();
 
     }
