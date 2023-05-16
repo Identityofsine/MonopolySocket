@@ -11,4 +11,15 @@ namespace MonopolyServer{
         return *_instance;
     }
 
+    MonopolyGame* ServerInstance::getGame(int gameID) {
+        for(int i = 0; this->gameVector.size(); i++) {
+            MonopolyGame* game = this->gameVector.at(i);
+            if(game->getGameID() == gameID) {
+                //found game;
+                return game;
+            }
+        }
+        return nullptr;
+    }
+
 }

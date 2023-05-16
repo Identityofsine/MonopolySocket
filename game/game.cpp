@@ -54,6 +54,10 @@ namespace Monopoly
 
     }
 
+    unsigned int MonopolyGame::getGameID(){
+        return this->gameID;
+    }
+
     /**
      * This function uses an ifstream to load a json file from ~/data/spaces and ~/data/color to generate both Landable objects and their associated behaviors.
      * 

@@ -37,9 +37,9 @@ namespace MonopolyServer {
         ServerInstance();
     public:
         static ServerInstance getInstance();
-        MonopolyGame getGame(int gameID);
-        MonopolyGame addGame(MonopolyGame* game);
-        MonopolyGame addPlayer(MonopolyGame* game, PlayerSocket* playerSocket);
+        MonopolyGame* getGame(int gameID);
+        bool addGame(MonopolyGame* game);
+        void addPlayer(int gameID, PlayerSocket* playerSocket);
     };
 
     int server();

@@ -37,6 +37,7 @@ namespace Monopoly{
         bool buyProperty(Player* player, Landable* spot);
         bool taxPlayer(Player* player, Money amount);
         void givePlayerPot(Player* player);
+        unsigned int getGameID();
     };
 
 
