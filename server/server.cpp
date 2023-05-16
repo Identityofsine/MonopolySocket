@@ -7,22 +7,6 @@ namespace MonopolyServer {
 
 
 
-struct PlayerSocket{
-    int socket;
-    int gameid;
-
-    PlayerSocket(int socket, int gameID){
-        this->socket = socket;
-        this->gameid = gameID;
-    }
-
-    PlayerSocket(){
-        this->socket = -1;
-        this->gameid = -1;
-    }
-
-};
-
 void sendMessageToPlayerGroup(PlayerSocket players[], int gameID, const char* message){
     for(int i = 0; i < MAX_PLAYERS; i++) {
         int socket_connection = players[i].gameid;
